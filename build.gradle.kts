@@ -15,6 +15,9 @@ import java.net.URI
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+plugins {
+    id("com.diffplug.spotless")
+}
 
 group = "io.aiven"
 
@@ -33,3 +36,13 @@ val parquetVersion by extra ("1.11.2")
 val junitVersion by extra ("5.10.2")
 val confluentPlatformVersion by extra ("7.2.2")
 val hadoopVersion by extra ("3.4.0")
+
+spotless {
+    format("misc") {
+        target("*.gradle", "*.md", ".gitignore")
+        targetExclude(".*/**", "**/build/**", "**/.gradle/**")
+        trimTrailingWhitespace()
+        indentWithSpaces()
+        endWithNewline()
+    }
+}
