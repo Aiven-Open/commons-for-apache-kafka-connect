@@ -1,3 +1,5 @@
+import java.net.URI
+
 /*
  * Copyright 2020 Aiven Oy
  *
@@ -14,28 +16,20 @@
  * limitations under the License.
  */
 
-plugins {
-    id "com.diffplug.spotless" version "6.22.0"
-    id "com.github.spotbugs" version "5.1.3"
-}
-
-
 group = "io.aiven"
 
-wrapper {
-    distributionType = 'ALL'
+tasks.wrapper {
+    distributionType = Wrapper.DistributionType.ALL
     doLast {
-        final URI sha256Uri = new URI(wrapper.getDistributionUrl() + ".sha256")
-        final String sha256Sum = new String(sha256Uri.toURL().bytes)
-        wrapper.getPropertiesFile() << "distributionSha256Sum=${sha256Sum}\n"
-        println "Added checksum to wrapper properties"
+        val sha256Uri = URI("$distributionUrl.sha256")
+        val sha256Sum = String(sha256Uri.toURL().readBytes())
+        propertiesFile.appendBytes("distributionSha256Sum=${sha256Sum}\n".toByteArray())
+        println("Added checksum to wrapper properties")
     }
 }
 
-ext {
-    kafkaVersion = "1.1.0"
-    parquetVersion = "1.11.2"
-    junitVersion = "5.10.2"
-    confluentPlatformVersion = "7.2.2"
-    hadoopVersion = "3.4.0"
-}
+val kafkaVersion by extra ("1.1.0")
+val parquetVersion by extra ("1.11.2")
+val junitVersion by extra ("5.10.2")
+val confluentPlatformVersion by extra ("7.2.2")
+val hadoopVersion by extra ("3.4.0")
